@@ -1,5 +1,9 @@
 #include <bits/stdc++.h>
+#include <chrono>
+
 using namespace std;
+using Clock = chrono::steady_clock;
+using Second = chrono::duration<double, micro>;
 
 struct Result {
     long long maxValue;
@@ -45,11 +49,12 @@ Result computeHVLCS(const string& A, const string& B, const unordered_map<char, 
 }
 
 int main(int argc, char* argv[]) {
+    
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     if (argc < 2) {
-        cout << "Usage: " << argv[0] << " <input_file>\n";
+        cout << "Usage: " << argv[0] << " <input_file> [--measure-runtime]\n";
         return 1;
     }
 
@@ -58,6 +63,8 @@ int main(int argc, char* argv[]) {
         cout << "Error: could not open input file.\n";
         return 1;
     }
+
+    bool measure_runtime = (argc >= 3 && string(argv[2]) == "--measure-runtime");
 
     int K;
     fin >> K;
@@ -73,10 +80,32 @@ int main(int argc, char* argv[]) {
     string A, B;
     fin >> A >> B;
 
-    Result ans = computeHVLCS(A, B, valueMap);
+    // When checking runtime, takes the average of 5 iterations
+    
+    if (!measure_runtime)
+    {
+        Result ans = computeHVLCS(A, B, valueMap);
 
-    cout << ans.maxValue << "\n";
-    cout << ans.subsequence << "\n";
+        cout << ans.maxValue << "\n";
+        cout << ans.subsequence << "\n";
+    }
+    else
+    {
+        for (int i = 0; i < 5; ++i)
+        {
+            chrono::time_point<Clock> codeTimer { Clock::now() };
+            Result ans = computeHVLCS(A, B, valueMap);
+            int elapsed = (int)std::chrono::duration_cast<Second>(Clock::now() - codeTimer).count();
+
+            if (i == 0)
+            {
+                cout << ans.maxValue << "\n";
+                cout << ans.subsequence << "\n";
+            }
+            
+            std::cout << "Runtime: " << elapsed << " microseconds" << std::endl;
+        }
+    }
 
     return 0;
 }
