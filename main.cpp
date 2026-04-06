@@ -3,7 +3,7 @@
 
 using namespace std;
 using Clock = chrono::steady_clock;
-using Second = chrono::duration<double, micro>;
+using MicroSecond = chrono::duration<double, micro>;
 
 struct Result {
     long long maxValue;
@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
         {
             chrono::time_point<Clock> codeTimer { Clock::now() };
             Result ans = computeHVLCS(A, B, valueMap);
-            int elapsed = (int)std::chrono::duration_cast<Second>(Clock::now() - codeTimer).count();
+            int elapsed = (int)std::chrono::duration_cast<MicroSecond>(Clock::now() - codeTimer).count();
 
             if (i == 0)
             {

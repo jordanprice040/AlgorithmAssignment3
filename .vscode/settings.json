@@ -1,5 +1,0 @@
-{
-    "cmake.debugConfig": {
-        "args": ["../tests/test10.txt", "--measure-runtime"]
-    }
-}
